@@ -1,0 +1,64 @@
+install.packages(c('readr', 'ggplot2', 'tidyr'))
+library(dplyr) 
+library(tidyr) 
+library(ggplot2)
+data <- data.frame( 
+  ID = 1:10, 
+ Name = c('John', 'Jane', 'Mary', NA, 'Tom', 'John', 'Alice', 'Bob', NA, 'Eve'), 
+ Age = c(28, 22, 35, 29, NA, 28, 42, 120, 30, 27), 
+ Email = c('john@example.com', 'jane@example.com', NA, 'mary@example.com', 'tom@example.com',  
+            'john@example.com', 'alice@example.com', 'bob@example.com', 'eve@example.com', 
+'eve@example.com'), 
+  Salary = c(50000, 60000, NA, 55000, 70000, 50000, 80000, 900000, 75000, 67000), 
+  stringsAsFactors = FALS
+# Display original data 
+cat("Original Data:\n") 
+print(data) 
+ 
+# Handling missing values 
+# Option 1: Drop rows with any missing values 
+data_cleaned <- data %>% drop_na() 
+ 
+# Option 2: Fill missing values 
+data_cleaned <- data %>%  
+  mutate( 
+    Name = ifelse(is.na(Name), 'Unknown', Name), 
+    Age = ifelse(is.na(Age), mean(Age, na.rm = TRUE), Age), 
+    Email = ifelse(is.na(Email), 'noemail@example.com', Email), 
+    Salary = ifelse(is.na(Salary), mean(Salary, na.rm = TRUE), Salary) 
+  ) 
+ 
+# Display data after handling missing values 
+cat("\nData After Handling Missing Values:\n") 
+print(data_cleaned) 
+ 
+# Detecting outliers using IQR method 
+detect_outliers <- function(x) { 
+  Q1 <- quantile(x, 0.25, na.rm = TRUE) 
+  Q3 <- quantile(x, 0.75, na.rm = TRUE) 
+  IQR <- Q3 - Q1 
+  lower_bound <- Q1 - 1.5 * IQR 
+  upper_bound <- Q3 + 1.5 * IQR 
+  return(x < lower_bound | x > upper_bound) 
+} 
+ 
+# Identify outliers in the Age and Salary columns 
+data_cleaned <- data_cleaned %>%  
+  mutate( 
+    Age_Outlier = detect_outliers(Age), 
+    Salary_Outlier = detect_outliers(Salary) 
+  ) 
+ 
+# Display data with outliers flagged 
+cat("\nData with Outliers Flagged:\n") 
+print(data_cleaned) 
+ 
+# Visualize outliers 
+ggplot(data_cleaned, aes(x = ID, y = Age)) + 
+  geom_point(aes(color = Age_Outlier)) + 
+  labs(title = "Age Outliers", y = "Age", x = "ID") + 
+  scale_color_manual(values = c("black", "red"))
+ggplot(data_cleaned, aes(x = ID, y = Salary)) + 
+  geom_point(aes(color = Salary_Outlier)) + 
+  labs(title = "Salary Outliers", y = "Salary", x = "ID") + 
+  scale_color_manual(values = c("black", "red")) 
