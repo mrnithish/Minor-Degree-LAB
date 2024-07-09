@@ -1,0 +1,80 @@
+// School age
+use school;
+
+db.Students.insertMany([
+    { name: "John Doe", age: 15, grade: 10, subjects: ["Math", "Science"] },
+    { name: "Jane Smith", age: 14, grade: 9, subjects: ["English", "Math"] },
+    { name: "Alice Johnson", age: 15, grade: 10, subjects: ["Math", "History"] },
+    { name: "Bob Brown", age: 16, grade: 11, subjects: ["Math", "Science", "English"] },
+    { name: "Charlie Davis", age: 15, grade: 10, subjects: ["Science", "History"] },
+    { name: "Diana White", age: 14, grade: 9, subjects: ["Math", "Science"] },
+    { name: "Emily Harris", age: 17, grade: 12, subjects: ["English", "History"] },
+    { name: "Frank Miller", age: 16, grade: 11, subjects: ["Math", "Science"] },
+    { name: "Grace Wilson", age: 15, grade: 10, subjects: ["Math", "English"] },
+    { name: "Hank Moore", age: 14, grade: 9, subjects: ["Math", "Science", "History"] }
+]);
+
+db.Students.find({ age: 15 }).pretty()
+
+db.Students.find({ subjects: "Math" }).pretty()
+
+db.Students.aggregate([
+    { $group: { _id: "$grade", count: { $sum: 1 } } }
+])
+
+// school sort , group
+
+use Schoosl;
+
+db.Students.insertMany([
+    { name: "John Doe", age: 15, grade: 10, subjects: ["Math", "Science"] },
+    { name: "Jane Smith", age: 14, grade: 9, subjects: ["English", "Math"] },
+    { name: "Alice Johnson", age: 15, grade: 10, subjects: ["Math", "History"] },
+    { name: "Bob Brown", age: 16, grade: 11, subjects: ["Math", "Science", "English"] },
+    { name: "Charlie Davis", age: 15, grade: 10, subjects: ["Science", "History"] },
+    { name: "Diana White", age: 14, grade: 9, subjects: ["Math", "Science"] },
+    { name: "Emily Harris", age: 17, grade: 12, subjects: ["English", "History"] },
+    { name: "Frank Miller", age: 16, grade: 11, subjects: ["Math", "Science"] },
+    { name: "Grace Wilson", age: 15, grade: 10, subjects: ["Math", "English"] },
+    { name: "Hank Moore", age: 14, grade: 9, subjects: ["Math", "Science", "History"] }
+]);
+db.Students.aggregate([
+    {
+        $group: {
+            _id: "$grade",
+            average_age: { $avg: "$age" }
+        }
+    }
+]);
+
+
+db.Students.aggregate([
+    {
+        $group: {
+            _id: "$grade",
+            average_age: { $avg: "$age" }
+        }
+    },
+    {
+        $sort: { average_age: -1 }
+    }
+]);
+
+db.Students.aggregate([
+    {
+        $group: {
+            _id: "$grade",
+            average_age: { $avg: "$age" }
+        }
+    },
+    {
+        $sort: { average_age: -1 }
+    },
+    {
+        $project: {
+            _id: 0,
+            grade: "$_id",
+            average_age: 1
+        }
+    }
+]);

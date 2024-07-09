@@ -1,0 +1,156 @@
+create database minor;
+use minor;
+/*1 .(i) Create the following tables with the mapping given below.
+stu_details (reg_no, stu_name, DOI), address, city)
+(ii) Display all the records.
+(iii) Update reg_no —160 to reg_no —161.
+(iv) Delete the row whose reg_no-161.
+(v) Display all details whose names begins with 'a'. */
+-- 1
+drop table stu_details;
+create table stu_details(
+	reg_no int,
+    stu_name varchar(50),
+    address varchar(50),
+    city varchar(50)
+);
+insert into stu_details
+(reg_no,stu_name,address,city)
+values
+(160,"abi","North street","Theni"),
+(162,"vinitit","we","Com");
+select * from stu_details;
+
+set sql_safe_updates=0;
+
+update stu_details 
+set reg_no =161
+where reg_no=160;
+
+select * from stu_details
+where stu_name like "a%";
+
+/* 2. (i) Create the following tables with the mapping given below.
+a. emp_details (emp_no, emp_name, DOB, address. doj, mobile no, dept_no, salary).
+b. dcpt_details (dept_no, dept_name, location).
+(ii) Truncate the table dept_details.
+(iii) Display the structure of the table emp_details.
+(iv) create View for emp_details table
+(v) Display the emp_name getting highest salary. */
+
+CREATE TABLE emp_details (
+    emp_no INT PRIMARY KEY,
+    emp_name VARCHAR(50),
+    DOB DATE,
+    address VARCHAR(100),
+    doj DATE,
+    mobile_no VARCHAR(15),
+    dept_no INT,
+    salary DECIMAL(10, 2)
+);
+
+CREATE TABLE dept_details (
+    dept_no INT PRIMARY KEY,
+    dept_name VARCHAR(50),
+    location VARCHAR(50)
+);
+
+INSERT INTO emp_details (emp_no, emp_name, DOB, address, doj, mobile_no, dept_no, salary) VALUES
+(101, 'John Doe', '1990-01-01', '123 Main St', '2010-05-15', '555-1234', 1, 50000),
+(102, 'Jane Smith', '1985-02-20', '456 Elm St', '2012-07-20', '555-5678', 2, 60000),
+(103, 'Alice Johnson', '1992-03-30', '789 Maple St', '2015-03-10', '555-8765', 1, 70000);
+
+INSERT INTO dept_details (dept_no, dept_name, location) VALUES
+(1, 'HR', 'New York'),
+(2, 'Engineering', 'San Francisco');
+
+truncate table dept_details;
+
+create view emp_view as
+select * from emp_details;
+select * from emp_details 
+where salary =(select max(salary) from emp_details);
+
+/* 3.(i) Create the following tables with the mapping given below.
+a. book (book_name,author,price,quantity).
+b. customer (Cust_id, Cust_name, Addr, ph_no,pan_no)
+(ii) List the author of the book which one have the price of 200.
+(iii).List the price of the book which one is between the price of 175 & 250.
+(iv) display min price of book */
+
+CREATE TABLE book (
+    book_name VARCHAR(100),
+    author VARCHAR(50),
+    price DECIMAL(10, 2),
+    quantity INT
+);
+
+CREATE TABLE customer (
+    Cust_id INT PRIMARY KEY,
+    Cust_name VARCHAR(50),
+    Addr VARCHAR(100),
+    ph_no VARCHAR(15),
+    pan_no VARCHAR(10)
+);
+
+INSERT INTO book (book_name, author, price, quantity) VALUES
+('Book A', 'Author 1', 150, 10),
+('Book B', 'Author 2', 200, 5),
+('Book C', 'Author 3', 225, 3),
+('Book D', 'Author 4', 175, 7);
+
+INSERT INTO customer (Cust_id, Cust_name, Addr, ph_no, pan_no) VALUES
+(1, 'John Doe', '123 Main St', '555-1234', 'ABCDE1234F'),
+(2, 'Jane Smith', '456 Elm St', '555-5678', 'FGHIJ5678K'),
+(3, 'Alice Johnson', '789 Maple St', '555-8765', 'KLMNO9012P');
+
+select *
+from book
+where price =200;
+
+select *
+from book
+where price between 175 and 250;
+
+select min(price)
+from book;
+
+/* 4. Create the following tables with the mapping given e owe
+a. stu_dctails (reg_no, stu name, DOB, address, city)
+b. mark_details (reg_no, mark l, mark2, mark3, total)
+(ii)Find out the name of all students.
+(iii)List all the student detail that who are all located in Chennai.
+(iv) Drop the table mark _ details.  */
+drop table stu_details;
+CREATE TABLE stu_details (
+    reg_no INT PRIMARY KEY,
+    stu_name VARCHAR(50),
+    DOB DATE,
+    address VARCHAR(100),
+    city VARCHAR(50)
+);
+CREATE TABLE mark_details (
+    reg_no INT PRIMARY KEY,
+    mark1 INT,
+    mark2 INT,
+    mark3 INT,
+    total INT,
+    FOREIGN KEY (reg_no) REFERENCES stu_details(reg_no)
+);
+INSERT INTO stu_details (reg_no, stu_name, DOB, address, city) VALUES
+(1, 'John Doe', '2000-01-01', '123 Main St', 'Chennai'),
+(2, 'Jane Smith', '2001-02-20', '456 Elm St', 'Mumbai'),
+(3, 'Alice Johnson', '2002-03-30', '789 Maple St', 'Chennai');
+INSERT INTO mark_details (reg_no, mark1, mark2, mark3, total) VALUES
+(1, 85, 90, 80, 255),
+(2, 78, 82, 88, 248),
+(3, 92, 95, 89, 276);
+
+select stu_name 
+from stu_details;
+
+select *
+from stu_details
+where city="Chennai";
+
+drop table mark_details;

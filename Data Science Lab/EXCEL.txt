@@ -1,0 +1,35 @@
+Input Data: Enter the roll numbers and marks in two subjects for each of the 50 students in the class.
+
+Calculate Average: Compute the average marks for each student by adding the marks in both subjects and dividing by 2.
+
+Determine Result: Check if each student has scored 40 or more in both subjects to declare them as PASS. Otherwise, label them as FAIL.
+
+Assign Grade: For PASS students, determine their grade based on their average marks according to the provided grading scale.
+
+Output Result and Grade: Display the result and grade for each student in the respective columns.
+
+grade =IF(D2="PASS", 
+    IF(A2>=60, "A", 
+       IF(A2>=50, "II", 
+          IF(A2>=40, "III", "IV")
+       )
+    ),
+    "IV"
+ )
+
+result =IF(AND(B2 >= 40, C2 >= 40), "PASS", "FAIL")
+AVG =(B2 + C2) / 2
+
+# TAx
+
+
+INCOME TAX=IF(B2 <= 150000, 0, 
+    IF(B2 <= 250000, (B2 - 150000) * 0.1, 
+        IF(B2 <= 325000, 10000 + (B2 - 250000) * 0.2, 
+            25000 + (B2 - 325000) * 0.3)))
+
+
+SURCHARGE TAX ==IF(B2 > 500000, C2 * 0.03, 0)
+
+TOTALTAX=C2 + D2
+
