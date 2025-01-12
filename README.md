@@ -1,2 +1,1 @@
 # Minor-Degree-LAB
-lab
