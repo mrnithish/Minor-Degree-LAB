@@ -21,11 +21,14 @@ model <- glm(CreditRisk ~ Age + Income + LoanAmount, data = data, family = binom
 # Summary of the model
 summary(model)
 
+
+
 # Predicting probabilities
 data$PredictedRisk <- predict(model, type = "response")
 
 # View the first few rows with predictions
 head(data)
+
 
 # Plotting the results
 ggplot(data, aes(x = Age, y = PredictedRisk, color = as.factor(CreditRisk))) +
