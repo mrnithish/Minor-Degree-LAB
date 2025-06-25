@@ -23,3 +23,4 @@ explained_variance <- pca_results$eigen$values / sum(pca_results$eigen$values)
 # Choose number of PCs based on a threshold or scree plot analysis 
 # Project data to lower dimension 
 reduced_data <- pca_results$scores[, 1:n_pcs]  # Select top n PCs 
+
